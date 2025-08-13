@@ -1,7 +1,7 @@
 from selenium.webdriver.support import expected_conditions as ec
 
-from locators import AuthorizationPageLocators, HeaderLocators
-from config import Common, User
+from locators import AuthorizationPageLocators, HeaderLocators, MainPageLocators
+from config import User
 
 
 class TestUserLogin:
@@ -18,9 +18,6 @@ class TestUserLogin:
         driver.find_element(*AuthorizationPageLocators.LOGIN_BUTTON).click()
         waiting.until(ec.visibility_of_element_located((HeaderLocators.PROFILE_NAME)))
 
-        # ОР: После авторизации должен быть редирект на главную страницу https://qa-desk.stand.praktikum-services.ru/
-        # ФР: URL не меняется, хотя пользователь залогинен - тест упадет на следующем шаге.
-        # Info: Для проверки логина без смены URL закомментируй строчку assert driver.current_url == Common.URL
-        assert driver.current_url == Common.URL
+        assert driver.find_element(*MainPageLocators.SEARCH_INPUT).is_displayed()
         assert driver.find_element(*HeaderLocators.PROFILE_NAME).text == 'User.'
         assert driver.find_element(*HeaderLocators.AVATAR_ICON).is_displayed()
